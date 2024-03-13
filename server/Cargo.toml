@@ -1,0 +1,12 @@
+[package]
+name = "humidserv"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+axum = "0.7.4"
+sqlite = "0.34.0"
+thiserror = "1.0.58"
+tokio = { version = "1.36.0", features = ["macros", "rt-multi-thread"] }

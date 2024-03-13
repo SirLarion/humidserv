@@ -1,0 +1,9 @@
+build/
+target/
+
+libraries/
+node_modules/
+
+secrets.h
+
+db.sqlite
