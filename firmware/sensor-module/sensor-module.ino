@@ -1,4 +1,5 @@
 #include <Adafruit_NeoPixel.h>
+#include <HttpClient.h>
 #include <SHTSensor.h>
 #include <SPI.h>
 #include <TimeLib.h>
@@ -24,6 +25,9 @@ bool prevReadSuccessful = false;
 
 const char *ssid = SECRET_SSID;
 const char *pwd = SECRET_PWD;
+
+WiFiClient wifi;
+HttpClient http = HttpClient(wifi, SECRET_IP, SECRET_PORT);
 
 void setPixelHigh() {
   pixel.setBrightness(10);
@@ -83,16 +87,40 @@ void setup() {
 
 void loop() {
   // Take a measurement every hour and send the data to the server
-  if ((second() % 3 == 0 && minute() == 0) || !prevReadSuccessful) {
-    if (sht.readSample()) {
-      Serial.printf("TEMP : ");
-      Serial.println(sht.getTemperature());
-      Serial.printf("HUM : ");
-      Serial.println(sht.getHumidity());
-      prevReadSuccessful = true;
-    } else {
-      Serial.println("Error reading sample");
+  if ((second() == 0 && minute() == 0) || !prevReadSuccessful) {
+    if (WiFi.status() != WL_CONNECTED) {
+      Serial.println("Error: Not connected to WiFi");
       prevReadSuccessful = false;
+    } else if (!sht.readSample()) {
+      Serial.println("Error: Failed to read sample");
+      prevReadSuccessful = false;
+    } else {
+      double temp = sht.getTemperature();
+      double hum = sht.getHumidity();
+
+      Serial.printf("TEMP : ");
+      Serial.println(temp);
+      Serial.printf("HUM : ");
+      Serial.println(hum);
+
+      Serial.print("[HTTP] begin...\n");
+
+      String contentType = "application/json";
+      String postData = "{\"temperature\":" + String(temp) +
+                        ",\"humidity\":" + String(hum) + "}";
+
+      http.post("/data", contentType, postData);
+
+      // read the status code and body of the response
+      int statusCode = http.responseStatusCode();
+      String response = http.responseBody();
+
+      Serial.print("Status code: ");
+      Serial.println(statusCode);
+      Serial.print("Response: ");
+      Serial.println(response);
+
+      prevReadSuccessful = true;
     }
   }
   delay(1000);

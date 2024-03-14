@@ -1,9 +1,10 @@
-use axum::{routing::get, Router};
+use axum::Router;
+use axum::routing::{get, post};
 use sqlite;
 
 mod handlers;
-mod constants;
-mod error;
+pub mod constants;
+pub mod error;
 
 use constants::*;
 use error::AppError;
@@ -15,9 +16,11 @@ async fn main() -> Result<(), AppError> {
   db.execute(TABLE_QUERY)?;
 
   // Initialize server
-  let app = Router::new().route("/", get(|| async { "Hello, World!" }));
+  let app = Router::new()
+    .route("/", get(|| async { "Hello, World!" }))
+    .route("/data", post(handlers::insert_data));
 
-  let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await?;
+  let listener = tokio::net::TcpListener::bind("0.0.0.0:1952").await?;
   axum::serve(listener, app).await?;
 
   Ok(())
