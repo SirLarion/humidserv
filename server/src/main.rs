@@ -21,6 +21,8 @@ async fn main() -> Result<(), AppError> {
     .route("/data", post(handlers::insert_data));
 
   let listener = tokio::net::TcpListener::bind("0.0.0.0:1952").await?;
+  println!("Listening on localhost:1952 🚀");
+
   axum::serve(listener, app).await?;
 
   Ok(())
