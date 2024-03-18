@@ -19,6 +19,9 @@ pub enum AppError {
   #[error(transparent)]
   ParseFloatError(#[from] num::ParseFloatError),
 
+  #[error(transparent)]
+  ParseIntError(#[from] num::ParseIntError),
+
   #[error("executing command failed: {0}")]
   CmdError(String),
 }
