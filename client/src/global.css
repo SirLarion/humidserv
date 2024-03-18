@@ -1,5 +1,10 @@
 /* Useful global CSS styles */
 
+@font-face {
+  font-family: 'Montserrat';
+  src: url(./assets/Montserrat.ttf) format('truetype');
+}
+
 /* Use a more-intuitive box-sizing model */
 *,
 *::before,

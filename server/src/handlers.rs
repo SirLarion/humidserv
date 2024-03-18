@@ -13,7 +13,9 @@ pub struct SensorPayload {
 
 #[derive(Serialize, Deserialize)]
 enum DataType {
+  #[serde(rename = "temperature")]
   Temperature,
+  #[serde(rename = "humidity")]
   Humidity
 }
 
