@@ -3,6 +3,7 @@ use std::env;
 use axum::Router;
 use axum::routing::{get, post};
 use tower_http::cors::{Any, CorsLayer};
+use tower_http::services::ServeDir;
 use sqlite;
 use dotenv::dotenv;
 
@@ -11,7 +12,7 @@ pub mod constants;
 pub mod error;
 
 use constants::*;
-use error::AppError;
+use error::*;
 
 #[tokio::main]
 async fn main() -> Result<(), AppError> {
@@ -24,8 +25,11 @@ async fn main() -> Result<(), AppError> {
 
   // Initialize server
   let app = Router::new()
-    .route("/", get(root))
+    // Data query and insert
+    .route("/data", get(handlers::query_data))
     .route("/data", post(handlers::insert_data))
+    // Serve HTML
+    .fallback_service(ServeDir::new("build"))
     .layer(cors);
 
   let port = env::var("HUMID_PORT")?;
@@ -37,6 +41,3 @@ async fn main() -> Result<(), AppError> {
   Ok(())
 }
 
-async fn root() -> &'static str {
-  "Hello, gamers"
-}

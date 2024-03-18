@@ -6,7 +6,7 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && (rm -rf ../server/build || true) && cp -r dist ../server/build",
     "serve": "vite preview"
   },
   "license": "GPLv3",
@@ -22,7 +22,9 @@
     "vite-plugin-solid": "^2.8.2"
   },
   "dependencies": {
+    "@types/ramda": "^0.29.11",
     "axios": "^1.6.8",
+    "ramda": "^0.29.1",
     "solid-js": "^1.8.11",
     "solid-styled-components": "^0.28.5"
   }

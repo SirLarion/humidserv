@@ -5,3 +5,6 @@ pub const TABLE_QUERY: &str = "
 
 pub const TEMPERATURE_INSERT_QUERY: &str = "INSERT INTO temperature (id, value) VALUES (:id, :value);";
 pub const HUMIDITY_INSERT_QUERY: &str = "INSERT INTO humidity (id, value) VALUES (:id, :value);";
+
+pub const TEMPERATURE_QUERY: &str = "SELECT value, timestamp FROM temperature ORDER BY timestamp DESC;";
+pub const HUMIDITY_QUERY: &str = "SELECT value, timestamp FROM humidity ORDER BY timestamp DESC;";

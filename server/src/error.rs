@@ -40,3 +40,4 @@ impl IntoResponse for AppError {
     (status, Json(ErrorResponse { message })).into_response()
   }
 }
+
