@@ -1,17 +1,22 @@
-import type { Component } from 'solid-js';
-import { styled } from 'solid-styled-components';
+import React, { FC } from 'react';
+import styled, { ThemeProvider } from 'styled-components';
+
 import { DataDisplay } from './components/DataDisplay';
+import { theme } from './theme';
 
 const StyledApp = styled.section`
   width: 100vw;
-  padding: 1rem;
+  max-width: 100vw;
+  overflow-x: hidden;
 `;
 
-const App: Component = () => (
-  <StyledApp>
-    <DataDisplay kind="temperature" />
-    <DataDisplay kind="humidity" />
-  </StyledApp>
+const App: FC = () => (
+  <ThemeProvider theme={theme}>
+    <StyledApp>
+      <DataDisplay kind="temperature" />
+      <DataDisplay kind="humidity" />
+    </StyledApp>
+  </ThemeProvider>
 );
 
 export default App;

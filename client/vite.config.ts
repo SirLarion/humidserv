@@ -1,20 +1,22 @@
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
-import solidPlugin from 'vite-plugin-solid';
-// import devtools from 'solid-devtools/vite';
+import svgr from '@svgr/rollup';
 
 export default defineConfig({
   plugins: [
-    /* 
-    Uncomment the following line to enable solid-devtools.
-    For more info see https://github.com/thetarnav/solid-devtools/tree/main/packages/extension#readme
-    */
-    // devtools(),
-    solidPlugin(),
+    react({
+      jsxRuntime: 'classic',
+      babel: {
+        plugins: ['babel-plugin-styled-components'],
+      },
+    }),
+    svgr(),
   ],
-  server: {
-    port: 3000,
-  },
   build: {
-    target: 'esnext',
+    outDir: 'build',
   },
+  server: {
+    port: 3010,
+  },
+  publicDir: 'public',
 });
