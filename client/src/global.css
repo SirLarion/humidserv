@@ -34,6 +34,7 @@ dd {
 /* Allow percentage-based heights in the application */
 html,
 body {
+  overscroll-behavior: none;
   height: 100%;
 }
 

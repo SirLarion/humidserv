@@ -96,7 +96,7 @@ export const DataDisplay: FC<IDataDisplayProps> = ({ kind }) => {
       <Header
         onMouseEnter={() => setHovered(true)}
         onTouchStart={() => setHovered(true)}
-        onTouchEnd={() => setTimeout(() => setHovered(false), 200)}
+        onTouchEnd={() => setTimeout(() => setHovered(false), 150)}
         onMouseLeave={() => setHovered(false)}
         onClick={() => setChartOpen(v => !v)}
       >
