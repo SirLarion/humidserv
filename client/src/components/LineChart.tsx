@@ -1,12 +1,12 @@
-import React, { FC, useMemo } from 'react';
-import { LineSvgProps, ResponsiveLine } from '@nivo/line';
+import React, { FC } from 'react';
+import { LineSvgProps, PointTooltipProps, ResponsiveLine } from '@nivo/line';
 import { min, max, clamp } from 'ramda';
 import { format } from 'date-fns';
-import { v4 as uuid } from 'uuid';
 import styled from 'styled-components';
 
-import { TDataKind } from './DataDisplay';
 import { theme } from '../theme';
+import { TDataKind } from './DataDisplay';
+import { Heading2, SmallText } from './Typography';
 
 interface ILineChartProps {
   kind: TDataKind;
@@ -25,6 +25,7 @@ const DEFAULT_OPTIONS: Omit<LineSvgProps, 'data'> = {
   },
   curve: 'monotoneX',
   xScale: { type: 'time' },
+  xFormat: x => `${format(x as Date, 'd.M. HH:')}00`,
   axisBottom: {
     format: x => `${format(x as Date, 'EEE')}\n${format(x as Date, 'H')}:00`,
     tickSize: 0,
@@ -51,11 +52,39 @@ const Wrapper = styled.div`
   height: 16rem;
 `;
 
+const TooltipBase = styled.div`
+  width: 7rem;
+  padding: 1rem;
+  border-radius: 0.4rem;
+  background-color: ${p => p.theme.background.primary};
+  border: 1px solid ${p => p.theme.background.secondary};
+`;
+
+const TooltipValue = styled(Heading2)`
+  > :last-child {
+    margin-left: 0.15rem;
+    font-size: 1rem;
+    opacity: 0.5;
+  }
+`;
+
 const getMinMaxY = (data: ILineChartProps['data'], deviation: number) => {
   const minY = data.reduce((acc, curr) => min(acc, curr.y), Infinity);
   const maxY = data.reduce((acc, curr) => max(acc, curr.y), 0);
 
   return [clamp(0, minY, minY - deviation), clamp(maxY, 100, maxY + deviation)];
+};
+
+const CustomTooltip: FC<PointTooltipProps> = ({ point }) => {
+  return (
+    <TooltipBase>
+      <SmallText>{point.data.xFormatted}</SmallText>
+      <TooltipValue>
+        {Number(point.data.y).toFixed(1)}
+        <span>{point.serieId === 'temperature' ? '°C' : '%'}</span>
+      </TooltipValue>
+    </TooltipBase>
+  );
 };
 
 export const LineChart: FC<ILineChartProps> = ({
@@ -64,17 +93,16 @@ export const LineChart: FC<ILineChartProps> = ({
   ...restProps
 }) => {
   const { deviation, color } = KIND_SPECIFIC_OPTIONS[kind];
-  const id = useMemo(() => uuid(), []);
   const [minY, maxY] = getMinMaxY(data, deviation);
 
   return (
     <Wrapper {...restProps}>
       <ResponsiveLine
-        data={[{ id, data }]}
+        data={[{ id: kind, data }]}
         {...DEFAULT_OPTIONS}
+        tooltip={CustomTooltip}
         colors={[color]}
         yScale={{ type: 'linear', min: minY, max: maxY }}
-        xFormat={x => `${format(x as Date, 'd.M. HH:')}00`}
       />
     </Wrapper>
   );

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { head, take } from 'ramda';
+import { head, take, reverse } from 'ramda';
 
 import { useAxiosGet } from '../../hooks/useAxiosGet';
 import { TDataKind } from '.';
@@ -14,10 +14,12 @@ export const useGetParsedData = (kind: TDataKind) => {
 
   const parsedData = useMemo(
     () =>
-      take(
-        24,
-        data?.map(dp => ({ x: new Date(dp.timestamp), y: dp.value })) || []
-      ).toReversed(),
+      reverse(
+        take(
+          24,
+          data?.map(dp => ({ x: new Date(dp.timestamp), y: dp.value })) || []
+        )
+      ),
     [data]
   );
   console.log(parsedData.length);

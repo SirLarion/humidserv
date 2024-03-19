@@ -4,7 +4,9 @@ import styled from 'styled-components';
 import { LineChart } from '../LineChart';
 import { Heading1 } from '../Typography';
 import { useGetParsedData } from './useGetParsedData';
-import { useSpring, animated } from 'react-spring';
+import { useSpring, animated } from '@react-spring/web';
+
+import { SPRING_CONFIG as config } from '../../config';
 
 import { ReactComponent as Arrow } from '../../assets/arrow_button.svg';
 import { ReactComponent as Thermometer } from '../../assets/thermometer.svg';
@@ -71,15 +73,18 @@ export const DataDisplay: FC<IDataDisplayProps> = ({ kind }) => {
 
   const cardSpring = useSpring({
     maxHeight: chartOpen ? '24.5rem' : '8rem',
+    config,
   });
 
   const caretSpring = useSpring({
     transform: chartOpen ? 'rotate(90deg)' : 'rotate(0deg)',
+    config,
   });
 
   const chartSpring = useSpring({
     transform: chartOpen ? 'scaleY(1)' : 'scaleY(0)',
     opacity: chartOpen ? 1 : 0,
+    config,
   });
 
   if (loading || error) {

@@ -5,8 +5,10 @@ import { DataDisplay } from './components/DataDisplay';
 import { theme } from './theme';
 
 const StyledApp = styled.section`
+  height: 100vh;
   width: 100vw;
   max-width: 100vw;
+  background-color: ${p => p.theme.background.primary};
   overflow-x: hidden;
 `;
 
