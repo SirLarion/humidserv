@@ -66,7 +66,8 @@ const CollapsibleChart = styled(animated(LineChart))`
 const Caret = animated(Arrow);
 
 export const DataDisplay: FC<IDataDisplayProps> = ({ kind }) => {
-  const { latest, parsedData, loading, error } = useGetParsedData(kind);
+  const { latest, parsedData, breakpoint, loading, error } =
+    useGetParsedData(kind);
 
   const [chartOpen, setChartOpen] = useState(false);
   const [hovered, setHovered] = useState(false);
@@ -82,7 +83,7 @@ export const DataDisplay: FC<IDataDisplayProps> = ({ kind }) => {
   });
 
   const chartSpring = useSpring({
-    transform: chartOpen ? 'scaleY(1)' : 'scaleY(0)',
+    transform: chartOpen ? 'scale3d(1, 1, 1)' : 'scale3d(1, 0, 1)',
     opacity: chartOpen ? 1 : 0,
     config,
   });
@@ -111,7 +112,12 @@ export const DataDisplay: FC<IDataDisplayProps> = ({ kind }) => {
           <Caret style={caretSpring} />
         </CaretButton>
       </Header>
-      <CollapsibleChart style={chartSpring} kind={kind} data={parsedData} />
+      <CollapsibleChart
+        style={chartSpring}
+        kind={kind}
+        breakpoint={breakpoint}
+        data={parsedData}
+      />
     </DisplayCard>
   );
 };

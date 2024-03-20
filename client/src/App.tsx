@@ -3,9 +3,12 @@ import styled, { ThemeProvider } from 'styled-components';
 
 import { DataDisplay } from './components/DataDisplay';
 import { theme } from './theme';
+import { OptionSelector } from './components/OptionSelector';
+import { TimeframeProvider } from './components/TimeframeProvider';
 
 const StyledApp = styled.section`
-  height: 100vh;
+  position: relative;
+  height: 120vh;
   width: 100vw;
   max-width: 100vw;
   background-color: ${p => p.theme.background.primary};
@@ -14,10 +17,13 @@ const StyledApp = styled.section`
 
 const App: FC = () => (
   <ThemeProvider theme={theme}>
-    <StyledApp>
-      <DataDisplay kind="temperature" />
-      <DataDisplay kind="humidity" />
-    </StyledApp>
+    <TimeframeProvider>
+      <StyledApp>
+        <DataDisplay kind="temperature" />
+        <DataDisplay kind="humidity" />
+        <OptionSelector />
+      </StyledApp>
+    </TimeframeProvider>
   </ThemeProvider>
 );
 
